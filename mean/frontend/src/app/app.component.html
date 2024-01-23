@@ -1,0 +1,40 @@
+<div class="container">
+  <div class="card">
+    <img src="assets/imgs/unir.png" class="card-img-top" alt="Logo UNIR">
+    <div class="card-header hf-color">
+      Actividad 2: despliegue de MEAN multicapa mediante Terraform
+    </div>
+    <div class="card-body">
+      <p>String de conexión: <b>{{ connectionString }}</b><br/>
+      <p>Estado actual: <b>{{ connectionStatus }}</b><br/>
+      <button type="button" [disabled]="dbActive"
+              class="btn btn-primary btn-sm" (click)="testDbConnection()">Probar conexión</button></p>
+
+      <div class="mb-3">
+        <input class="form-control" [disabled]="!dbActive" [(ngModel)]="newItem" placeholder="Escribe un texto" />
+        <button type="button" class="btn btn-primary btn-sm"
+                [disabled]="!dbActive" (click)="insertItem()">Insertar el texto en la BD</button>
+      </div>
+
+      <h4>Elementos en la BD</h4>
+      <div *ngIf="items.length === 0; else mostrarItems">
+        La BD está vacía
+      </div>
+      <ng-template #mostrarItems>
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let item of items">
+            {{ item.text }}
+            <span class="badge rounded-pill bg-light text-dark">{{ item.date }}</span>
+            <button class="btn btn-link" [disabled]="!dbActive" (click)="eliminarItem(item)">
+              <i class="fas fa-trash-alt text-danger"></i>
+            </button>
+          </li>
+        </ul>
+      </ng-template>
+    </div>
+    <div class="card-footer text-muted hf-color">
+      Maestría: Desarrollo y Operaciones de Software<br/>
+      Alumno: Carlos E. Colón R.
+    </div>
+  </div>
+</div>

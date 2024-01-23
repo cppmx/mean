@@ -1,0 +1,22 @@
+#!/bin/bash
+
+BACKEND_IP=$(aws ec2 describe-instances --region us-west-2 --filters "Name=tag:Name,Values=backend-instance" --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
+FRONTEND_IP=$(aws ec2 describe-instances --region us-west-2 --filters "Name=tag:Name,Values=frontend-instance" --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
+
+if [ -z "$BACKEND_IP" ]; then
+    echo "No se pudo obtener la IP pública de la instancia del backend."
+else
+    echo "La IP pública del backend es: $BACKEND_IP"
+    echo "Probando la conexión a la base de datos de MongoDB"
+
+    curl -s http://$BACKEND_IP:3000/api/testdb | jq -r .message
+fi
+
+sleep 1
+
+if [ -z "$BACKEND_IP" ]; then
+    echo "No se pudo obtener la IP pública de la instancia del backend."
+else
+    echo "La IP pública del frontend es: $FRONTEND_IP"
+    echo "Puedes ver la aplicación en http://$FRONTEND_IP/"
+fi
